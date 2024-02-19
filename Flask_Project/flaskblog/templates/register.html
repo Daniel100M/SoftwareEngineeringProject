@@ -71,6 +71,14 @@
                         {{ form.confirm_password(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+                <div class="form-group" id="user_type_select">
+                    {{ form.user_type.label(class="form-control-label") }}
+                    {{ form.user_type(class="form-control form-control-lg", id="user_type_select", onchange="clickUserType(this.value)") }}
+                </div>
+                <div class="form-group" id="food_type_group" style="display: none;">
+                    {{ form.food_type.label(class="form-control-label") }}
+                    {{ form.food_type(class="form-control form-control-lg") }}
+                </div>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
@@ -82,4 +90,6 @@
             Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
         </small>
     </div>
+
 {% endblock content %}
+
