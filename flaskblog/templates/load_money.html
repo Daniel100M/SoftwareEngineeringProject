@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="content-section">
+    <style>
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: grid;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <h1>Load Money</h1>
+    <p>Current Budget: ${{ budget }}</p>
+    <div id="error-message" style="color: red; display: none;"></div>
+    <form id="payment-form" action="/load_money" method="POST">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" step="0.01" min="0.01" required>
+        <label for="card_number">Credit Card Number:</label>
+        <input type="text" id="card_number" name="card_number" pattern="\d{16}" title="Please enter a 16-digit credit card number" required>
+        <label for="exp_date">Expiration Date (MM/YY):</label>
+        <input type="text" id="exp_date" name="exp_date" placeholder="MM/YY" required>
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" pattern="\d{3}" name="cvv" required>
+        <button type="button" onclick="validateForm()">Load</button>
+    </form>
+
+    </div>
+<script>
+    function validateForm() {
+        var amount = document.getElementById('amount').value;
+        var cardNumber = document.getElementById('card_number').value;
+        var expDate = document.getElementById('exp_date').value;
+        var cvv = document.getElementById('cvv').value;
+
+        if (!amount || !cardNumber || !expDate || !cvv) {
+            document.getElementById('error-message').innerText = 'Please fill out all credit card details.';
+            document.getElementById('error-message').style.display = 'block';
+            return;
+        }
+
+        if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+            document.getElementById('error-message').innerText = 'Please enter a valid 16-digit credit card number.';
+            document.getElementById('error-message').style.display = 'block';
+            return;
+        }
+
+        if (cvv.length !== 3 || isNaN(cvv)) {
+            document.getElementById('error-message').innerText = 'Please enter a valid 3-digit CVV.';
+            document.getElementById('error-message').style.display = 'block';
+            return;
+        }
+
+        var expDateParts = expDate.split('/');
+        if (expDateParts.length !== 2 || isNaN(expDateParts[0]) || isNaN(expDateParts[1])) {
+            document.getElementById('error-message').innerText = 'Please enter a valid expiration date1 (MM/YY).';
+            document.getElementById('error-message').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('error-message').style.display = 'none';
+        document.getElementById('payment-form').submit();
+    }
+</script>
+
+{% endblock content %}
